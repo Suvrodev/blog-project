@@ -4,7 +4,7 @@ export type TUser = {
   name: string;
   email: string;
   password: string;
-  role: "admin" | "user";
+  role: "Admin" | "User";
   isBlocked: boolean;
   //   createdAt: Date;
   //   updatedAt: Date;
