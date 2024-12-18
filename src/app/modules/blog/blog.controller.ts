@@ -14,8 +14,7 @@ const createBlog = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: "Invalid credentials",
-      error: error,
+      message: error,
     });
   }
 };
@@ -33,8 +32,7 @@ const getAllBlog = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: "Invalid credentials",
-      error: error,
+      message: error,
     });
   }
 };
@@ -53,8 +51,7 @@ const getSingleBlog = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: "Invalid credentials",
-      error: error,
+      message: error,
     });
   }
 };
@@ -72,8 +69,7 @@ const deleteBlog = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: "Invalid credentials",
-      error: error,
+      message: error,
     });
   }
 };
@@ -92,8 +88,7 @@ const updateBlog = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(401).send({
       success: false,
-      message: "Invalid credentials",
-      error: error,
+      message: error,
     });
   }
 };
