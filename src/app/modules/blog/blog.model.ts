@@ -7,7 +7,6 @@ const blogSchema = new Schema<TBlog>(
     content: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: "users", required: true },
     isPublished: { type: Boolean, default: true },
-    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true, // Automatically manages createdAt and updatedAt fields

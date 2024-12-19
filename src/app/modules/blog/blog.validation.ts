@@ -19,7 +19,6 @@ const blogValidationSchema = z.object({
     })
     .regex(/^[a-fA-F0-9]{24}$/, "Author must be a valid ObjectId"), // Validate MongoDB ObjectId
   isPublished: z.boolean().optional().default(true), // Optional with default value true
-  isDeleted: z.boolean().optional().default(false), // Optional with default value false
 });
 
 export const blogValidations = {

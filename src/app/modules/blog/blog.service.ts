@@ -102,7 +102,7 @@ const getSingleBlogFromDB = async (id: string) => {
 
 //Delete Blog
 const deleteBlogFromDB = async (id: string) => {
-  const result = await blogModel.findByIdAndUpdate(id, { isDeleted: true });
+  const result = await blogModel.findByIdAndDelete(id);
   return result;
 };
 
