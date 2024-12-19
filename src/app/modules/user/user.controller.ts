@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { userServices } from "./user.service";
 
 ///Register User
-const registerUser = async (req: Request, res: Response) => {
+const registerUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userData = req.body;
     const result = await userServices.registerUserIntoDB(userData);
@@ -13,14 +17,15 @@ const registerUser = async (req: Request, res: Response) => {
       statusCode: 201,
       data: result,
     });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: "Validation error",
-      statusCode: 400,
-      error: error,
-      stack: "error stack",
-    });
+  } catch (error: any) {
+    // res.status(400).json({
+    //   success: false,
+    //   message: error.message || "Validation error",
+    //   statusCode: 400,
+    //   error: error,
+    //   stack: "error stack",
+    // });
+    next(error);
   }
 };
 

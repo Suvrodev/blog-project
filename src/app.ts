@@ -1,7 +1,9 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { userRoutes } from "./app/modules/user/user.route";
 import router from "./app/routes";
+import notFound from "./app/middleware/notFound";
+import globalErrorHandler from "./app/middleware/globalErrorHandler";
 const app: Application = express();
 
 //Parser
@@ -16,4 +18,9 @@ const getController = async (req: Request, res: Response) => {
 };
 
 app.get("/", getController);
+
+//Global Error Handler
+app.use(globalErrorHandler);
+//Not Found Route
+app.use(notFound);
 export default app;
