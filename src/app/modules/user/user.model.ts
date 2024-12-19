@@ -23,7 +23,7 @@ const userSchema = new Schema<TUser>(
       type: String,
       enum: {
         values: ["Admin", "User"],
-        message: "{VALUE} is not valid. Role can only be either user or admin",
+        message: "{VALUE} is not valid. Role can only be either User or Admin",
       },
       default: "User",
     },

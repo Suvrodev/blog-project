@@ -22,7 +22,7 @@ const createBlog = async (req: Request, res: Response) => {
 //Get All Blog
 const getAllBlog = async (req: Request, res: Response) => {
   try {
-    const result = await BlogServices.getAllBlogsFromDB();
+    const result = await BlogServices.getAllBlogsFromDB(req.query);
     res.status(201).json({
       success: true,
       message: "Blog retrive successfully",

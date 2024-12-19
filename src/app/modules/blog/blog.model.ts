@@ -26,14 +26,12 @@ const blogSchema = new Schema<TBlog>(
 
 //Pre Query middleware for dont match isDeleted:true for all
 blogSchema.pre("find", function (next) {
-  console.log("Pres Middleware of blog");
   this.find({ isDeleted: { $ne: true } });
   next();
 });
 
 //Pre Query middleware for dont match isDeleted:true for all
 blogSchema.pre("findOne", function (next) {
-  console.log("Pres Middleware of blog");
   this.find({ isDeleted: { $ne: true } });
   next();
 });
