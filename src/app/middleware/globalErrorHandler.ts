@@ -1,19 +1,58 @@
-import { NextFunction, Request, Response } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { ZodError, ZodIssue } from "zod";
+import { TErrorSources } from "../interface/error";
+import handleZodError from "../errors/handleZodError";
+import handleValidationError from "../errors/handleValidationError";
+import handleCastError from "../errors/handleCastError";
+import handleDuplicateError from "../errors/handleDuplicateError";
 
-const globalErrorHandler = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const statusCode = 500;
-  const message = err.message || "Something went Wrong";
+const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  let statusCode = err.statusCode || 500;
+  let message = err.message || "Something went Wrong";
+
+  let errorSources: TErrorSources = [
+    {
+      path: "",
+      message: err.message || "Something went Wrong",
+    },
+  ];
+
+  if (err instanceof ZodError) {
+    const simplifiedError = handleZodError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSources = simplifiedError?.errorSources;
+  } else if (err?.name === "ValidationError") {
+    const simplifiedError = handleValidationError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSources = simplifiedError?.errorSources;
+  } else if (err?.name === "CastError") {
+    const simplifiedError = handleCastError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSources = simplifiedError?.errorSources;
+  } else if (err?.code === 11000) {
+    const simplifiedError = handleDuplicateError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSources = simplifiedError?.errorSources;
+  }
 
   res.status(statusCode).json({
     success: false,
-    message: message,
-    error: err,
+    message,
+    statusCode,
+    error: errorSources,
+    stack: err?.stack,
   });
 };
 
 export default globalErrorHandler;
+
+// Error Pattern
+//  "success"
+//   "message"
+//   "statusCode"
+//   "error:{path,message}"
+//   "stack"

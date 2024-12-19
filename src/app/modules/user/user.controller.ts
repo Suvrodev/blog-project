@@ -1,12 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { userServices } from "./user.service";
 
 ///Register User
-const registerUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const registerUser: RequestHandler = async (req, res, next) => {
   try {
     const userData = req.body;
     const result = await userServices.registerUserIntoDB(userData);

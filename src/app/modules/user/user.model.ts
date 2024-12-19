@@ -9,14 +9,14 @@ const userSchema = new Schema<TUser>(
     name: { type: String, required: true, trim: true },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      required: [true, "Email Must be required"],
+      unique: [true, "This email already Exists"],
       lowercase: true,
       trim: true,
     },
     password: {
       type: String,
-      required: [true, "Password Must be needed"],
+      required: [true, "Password Must be required"],
       maxlength: [10, "Password can not be more than 10 character"],
     },
     role: {

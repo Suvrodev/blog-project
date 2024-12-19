@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { BlogServices } from "./blog.service";
 
 ///Create Blog
-const createBlog = async (req: Request, res: Response) => {
+const createBlog: RequestHandler = async (req, res, next) => {
   try {
     const result = await BlogServices.createBlogIntoDB(req.body);
     res.status(201).json({
@@ -12,15 +12,16 @@ const createBlog = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error,
-    });
+    // res.status(401).json({
+    //   success: false,
+    //   message: error,
+    // });
+    next(error);
   }
 };
 
 //Get All Blog
-const getAllBlog = async (req: Request, res: Response) => {
+const getAllBlog: RequestHandler = async (req, res, next) => {
   try {
     const result = await BlogServices.getAllBlogsFromDB(req.query);
     res.status(201).json({
@@ -30,15 +31,16 @@ const getAllBlog = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error,
-    });
+    // res.status(401).json({
+    //   success: false,
+    //   message: error,
+    // });
+    next(error);
   }
 };
 
 //Get Single Blog
-const getSingleBlog = async (req: Request, res: Response) => {
+const getSingleBlog: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
     const result = await BlogServices.getSingleBlogFromDB(id);
@@ -49,15 +51,16 @@ const getSingleBlog = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error,
-    });
+    // res.status(401).json({
+    //   success: false,
+    //   message: error,
+    // });
+    next(error);
   }
 };
 
 //Delete Blog
-const deleteBlog = async (req: Request, res: Response) => {
+const deleteBlog: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
     const result = await BlogServices.deleteBlogFromDB(id);
@@ -67,15 +70,16 @@ const deleteBlog = async (req: Request, res: Response) => {
       statusCode: 200,
     });
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error,
-    });
+    // res.status(401).json({
+    //   success: false,
+    //   message: error,
+    // });
+    next(error);
   }
 };
 
 //Update Blog
-const updateBlog = async (req: Request, res: Response) => {
+const updateBlog: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
     const result = await BlogServices.updateBlogIntoDB(id, req.body);

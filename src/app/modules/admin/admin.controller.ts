@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { adminServices } from "./admin.service";
 
 //make user blocked
-const makeUserBlockByAdmin = async (req: Request, res: Response) => {
+const makeUserBlockByAdmin: RequestHandler = async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const result = await adminServices.makeUserBlockedIntoDBByAdmin(
@@ -16,15 +16,16 @@ const makeUserBlockByAdmin = async (req: Request, res: Response) => {
       statusCode: 200,
     });
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error,
-    });
+    // res.status(401).json({
+    //   success: false,
+    //   message: error,
+    // });
+    next(error);
   }
 };
 
 //Delete Blog
-const deleteBlogByAdmin = async (req: Request, res: Response) => {
+const deleteBlogByAdmin: RequestHandler = async (req, res, next) => {
   try {
     const id = req?.params?.id;
     const result = adminServices.deleteBlogFromDBByAdmin(id);
@@ -34,10 +35,11 @@ const deleteBlogByAdmin = async (req: Request, res: Response) => {
       statusCode: 200,
     });
   } catch (error) {
-    res.status(401).json({
-      success: false,
-      message: error,
-    });
+    // res.status(401).json({
+    //   success: false,
+    //   message: error,
+    // });
+    next(error);
   }
 };
 
