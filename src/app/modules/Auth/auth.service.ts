@@ -1,4 +1,5 @@
 import config from "../../config";
+import AppError from "../../errors/AppError";
 import { userModel } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
 import bcrypt from "bcrypt";
@@ -9,13 +10,13 @@ const loginUser = async (payload: TLoginUser) => {
   //Checking  if the user is exist
   const isUserExists = await userModel.findOne({ email: payload.email });
   if (!isUserExists) {
-    throw new Error("User not Found");
+    throw new AppError(404, "User not Found");
   }
 
   //Check User blocked or not
   const userIsBlocked = isUserExists?.isBlocked;
   if (userIsBlocked) {
-    throw new Error("User is Blocked");
+    throw new AppError(403, "User is Blocked");
   }
 
   //Check Password is right or wrong
@@ -24,18 +25,22 @@ const loginUser = async (payload: TLoginUser) => {
     isUserExists?.password
   );
   if (!isPasswordMatched) {
-    throw new Error("Password do not matched");
+    throw new AppError(500, "Password do not matched");
   }
 
+  console.log("is User exists: ", isUserExists);
   //Create Token and send to the client
   const jwtPayload = {
+    id: isUserExists.id,
+    name: isUserExists?.name,
     email: isUserExists?.email,
     role: isUserExists?.role,
+    isBlocked: isUserExists?.isBlocked,
   };
   const accessToken = Jwt.sign(jwtPayload, config.jwt_access_token as string, {
     expiresIn: "10d",
   });
-
+  //   console.log("JwtPayload: ", jwtPayload);
   //Access Granted: Send AccessToken, Refresh Token
   return {
     accessToken,

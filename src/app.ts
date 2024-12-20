@@ -15,7 +15,7 @@ app.use("/api", router);
 
 const getController = async (req: Request, res: Response) => {
   res.send("This is Blog Assignment-3 is running");
-  console.log("Req.User: ", req.user);
+  // console.log("Req.User: ", req.user);
 };
 
 app.get("/", getController);

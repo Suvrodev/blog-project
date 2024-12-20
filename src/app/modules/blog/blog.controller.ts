@@ -1,31 +1,35 @@
 import { Request, RequestHandler, Response } from "express";
 import { BlogServices } from "./blog.service";
+import AppError from "../../errors/AppError";
 
 ///Create Blog
 const createBlog: RequestHandler = async (req, res, next) => {
   try {
     const loggedUser = req.user;
     console.log("Logged User: ", loggedUser);
-    const result = await BlogServices.createBlogIntoDB(req.body);
-    console.log("Result: ", result); // Full Mongoose Document
+    const blogData = req?.body;
+    blogData.author = loggedUser?.id;
+    console.log("Blog data: ", blogData);
+    const result = await BlogServices.createBlogIntoDB(blogData);
+    // console.log("Result: ", result); // Full Mongoose Document
     const newResult = result.toObject();
-    console.log("New Result: ", newResult);
+    // console.log("New Result: ", newResult);
 
     // Structure the result to add loggedUser inside the author details
     const newResultWithUser: any = {
       ...newResult,
-      author: {
-        details: loggedUser, // Add loggedUser inside the author.details field
-      },
+      author: loggedUser, // Add loggedUser inside the author.details field
     };
+    const { isPublished, createdAt, updatedAt, __v, ...finalResult } =
+      newResultWithUser;
 
-    console.log("New Result with User: ", newResultWithUser);
+    // console.log("New Result with User: ", newResultWithUser);
 
     res.status(201).json({
       success: true,
       message: "Blog created successfully",
       statusCode: 201,
-      data: newResultWithUser,
+      data: finalResult,
     });
   } catch (error) {
     next(error);
@@ -84,7 +88,7 @@ const updateBlog: RequestHandler = async (req, res, next) => {
     const { role } = req.user;
     // console.log("Logged User Role: ", role);
     if (role === "Admin") {
-      throw new Error("Admin can not update blog");
+      throw new AppError(500, "Admin can not update blog");
     }
 
     const id = req.params.id;

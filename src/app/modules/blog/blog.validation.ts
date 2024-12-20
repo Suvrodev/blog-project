@@ -13,11 +13,7 @@ const blogValidationSchema = z.object({
       required_error: "Content is required",
     })
     .min(1, "Content cannot be empty"),
-  author: z
-    .string({
-      required_error: "Author is required",
-    })
-    .regex(/^[a-fA-F0-9]{24}$/, "Author must be a valid ObjectId"), // Validate MongoDB ObjectId
+  author: z.string().optional(), // Made optional
   isPublished: z.boolean().optional().default(true), // Optional with default value true
 });
 
