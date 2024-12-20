@@ -5,8 +5,11 @@ import AppError from "../../errors/AppError";
 ///Create Blog
 const createBlog: RequestHandler = async (req, res, next) => {
   try {
-    const loggedUser = req.user;
+    const loggedUser = req?.user;
     console.log("Logged User: ", loggedUser);
+    if (loggedUser?.role === "Admin") {
+      throw new AppError(403, "Admin is unable to create blog");
+    }
     const blogData = req?.body;
     blogData.author = loggedUser?.id;
     console.log("Blog data: ", blogData);
@@ -70,8 +73,9 @@ const getSingleBlog: RequestHandler = async (req, res, next) => {
 //Delete Blog
 const deleteBlog: RequestHandler = async (req, res, next) => {
   try {
+    const { id: loggedUserId } = req.user;
     const id = req.params.id;
-    const result = await BlogServices.deleteBlogFromDB(id);
+    const result = await BlogServices.deleteBlogFromDB(id, loggedUserId);
     res.status(201).json({
       success: true,
       message: "Blog deleted successfully",
@@ -85,14 +89,18 @@ const deleteBlog: RequestHandler = async (req, res, next) => {
 //Update Blog
 const updateBlog: RequestHandler = async (req, res, next) => {
   try {
-    const { role } = req.user;
+    const { role, id: loggedUserId } = req.user;
     // console.log("Logged User Role: ", role);
     if (role === "Admin") {
       throw new AppError(500, "Admin can not update blog");
     }
 
     const id = req.params.id;
-    const result = await BlogServices.updateBlogIntoDB(id, req.body);
+    const result = await BlogServices.updateBlogIntoDB(
+      id,
+      req.body,
+      loggedUserId
+    );
     res.status(200).json({
       success: true,
       message: "Blog updated successfully",

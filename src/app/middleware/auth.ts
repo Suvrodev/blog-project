@@ -7,7 +7,7 @@ const auth = (...requiredRoles: string[]) => {
     try {
       const extractedToken = req.headers.authorization;
       const token = (extractedToken as string).split(" ")[1];
-      console.log("Token===: ", token);
+      //   console.log("Token===: ", token);
 
       //if the token is sent from the client
       if (!token) {

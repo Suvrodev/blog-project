@@ -1,3 +1,4 @@
+import AppError from "../../errors/AppError";
 import { TBlog } from "./blog.interface";
 import { blogModel } from "./blog.model";
 
@@ -101,13 +102,39 @@ const getSingleBlogFromDB = async (id: string) => {
 };
 
 //Delete Blog
-const deleteBlogFromDB = async (id: string) => {
+const deleteBlogFromDB = async (id: string, loggedUserId: string) => {
+  console.log("Logged User id: ", loggedUserId);
+
+  ///Check author of blog
+  const targetBlog = await blogModel.findById(id);
+  const blogAuthorId = targetBlog?.author;
+  console.log("Author id of Target Blog: ", blogAuthorId);
+
+  if (loggedUserId !== blogAuthorId?.toString()) {
+    throw new AppError(404, "Blog ref id and user is not same");
+  }
+
   const result = await blogModel.findByIdAndDelete(id);
   return result;
 };
 
 //update Blog
-const updateBlogIntoDB = async (id: string, payload: Partial<TBlog>) => {
+const updateBlogIntoDB = async (
+  id: string,
+  payload: Partial<TBlog>,
+  loggedUserId: string
+) => {
+  console.log("Logged User id: ", loggedUserId);
+
+  ///Check author of blog
+  const targetBlog = await blogModel.findById(id);
+  const blogAuthorId = targetBlog?.author;
+  console.log("Author id of Target Blog: ", blogAuthorId);
+
+  if (loggedUserId !== blogAuthorId?.toString()) {
+    throw new AppError(404, "Blog ref id and user is not same");
+  }
+
   const result = await blogModel.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };
