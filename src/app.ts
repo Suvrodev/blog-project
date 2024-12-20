@@ -14,7 +14,7 @@ app.use(cors());
 app.use("/api", router);
 
 const getController = async (req: Request, res: Response) => {
-  res.send("This is Blog Assignment-3 is running from server");
+  res.send("This is Blog Assignment-3 is running from blogserverr.vercel.app");
   // console.log("Req.User: ", req.user);
 };
 
