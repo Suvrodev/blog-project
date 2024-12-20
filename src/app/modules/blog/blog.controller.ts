@@ -4,18 +4,30 @@ import { BlogServices } from "./blog.service";
 ///Create Blog
 const createBlog: RequestHandler = async (req, res, next) => {
   try {
+    const loggedUser = req.user;
+    console.log("Logged User: ", loggedUser);
     const result = await BlogServices.createBlogIntoDB(req.body);
+    console.log("Result: ", result); // Full Mongoose Document
+    const newResult = result.toObject();
+    console.log("New Result: ", newResult);
+
+    // Structure the result to add loggedUser inside the author details
+    const newResultWithUser: any = {
+      ...newResult,
+      author: {
+        details: loggedUser, // Add loggedUser inside the author.details field
+      },
+    };
+
+    console.log("New Result with User: ", newResultWithUser);
+
     res.status(201).json({
       success: true,
       message: "Blog created successfully",
       statusCode: 201,
-      data: result,
+      data: newResultWithUser,
     });
   } catch (error) {
-    // res.status(401).json({
-    //   success: false,
-    //   message: error,
-    // });
     next(error);
   }
 };
@@ -28,13 +40,9 @@ const getAllBlog: RequestHandler = async (req, res, next) => {
       success: true,
       message: "Blog retrive successfully",
       statusCode: 201,
-      data: result,
+      data: { result },
     });
   } catch (error) {
-    // res.status(401).json({
-    //   success: false,
-    //   message: error,
-    // });
     next(error);
   }
 };
@@ -51,10 +59,6 @@ const getSingleBlog: RequestHandler = async (req, res, next) => {
       data: result,
     });
   } catch (error) {
-    // res.status(401).json({
-    //   success: false,
-    //   message: error,
-    // });
     next(error);
   }
 };
@@ -70,10 +74,6 @@ const deleteBlog: RequestHandler = async (req, res, next) => {
       statusCode: 200,
     });
   } catch (error) {
-    // res.status(401).json({
-    //   success: false,
-    //   message: error,
-    // });
     next(error);
   }
 };
@@ -81,6 +81,12 @@ const deleteBlog: RequestHandler = async (req, res, next) => {
 //Update Blog
 const updateBlog: RequestHandler = async (req, res, next) => {
   try {
+    const { role } = req.user;
+    // console.log("Logged User Role: ", role);
+    if (role === "Admin") {
+      throw new Error("Admin can not update blog");
+    }
+
     const id = req.params.id;
     const result = await BlogServices.updateBlogIntoDB(id, req.body);
     res.status(200).json({
@@ -90,10 +96,7 @@ const updateBlog: RequestHandler = async (req, res, next) => {
       data: result,
     });
   } catch (error) {
-    res.status(401).send({
-      success: false,
-      message: error,
-    });
+    next(error);
   }
 };
 

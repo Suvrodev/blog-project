@@ -17,7 +17,7 @@ const router = express.Router();
 // };
 
 router.post(
-  "/register",
+  "/",
   validateRequest(userValidations.userValidationSchema),
   userControllers.registerUser
 );

@@ -108,7 +108,6 @@ const deleteBlogFromDB = async (id: string) => {
 
 //update Blog
 const updateBlogIntoDB = async (id: string, payload: Partial<TBlog>) => {
-  console.log("Modified Data: ", payload);
   const result = await blogModel.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };
