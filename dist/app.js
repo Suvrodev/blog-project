@@ -24,7 +24,7 @@ app.use((0, cors_1.default)());
 //application routes
 app.use("/api", routes_1.default);
 const getController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("This is Blog Assignment-3 is running");
+    res.send("This is Blog Assignment-3 is running from server");
     // console.log("Req.User: ", req.user);
 });
 app.get("/", getController);
