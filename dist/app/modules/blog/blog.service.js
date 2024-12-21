@@ -110,11 +110,11 @@ const deleteBlogFromDB = (id, loggedUserId) => __awaiter(void 0, void 0, void 0,
 });
 //update Blog
 const updateBlogIntoDB = (id, payload, loggedUserId) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("Logged User id: ", loggedUserId);
+    //   console.log("Logged User id: ", loggedUserId);
     ///Check author of blog
     const targetBlog = yield blog_model_1.blogModel.findById(id);
     const blogAuthorId = targetBlog === null || targetBlog === void 0 ? void 0 : targetBlog.author;
-    console.log("Author id of Target Blog: ", blogAuthorId);
+    //   console.log("Author id of Target Blog: ", blogAuthorId);
     if (loggedUserId !== (blogAuthorId === null || blogAuthorId === void 0 ? void 0 : blogAuthorId.toString())) {
         throw new AppError_1.default(404, "Blog ref id and user is not same");
     }

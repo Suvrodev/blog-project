@@ -22,10 +22,10 @@ const userValidationSchema = zod_1.z.object({
     })
         .max(10, "Password cannot be more than 10 characters"),
     role: zod_1.z
-        .enum(["Admin", "User"], {
-        invalid_type_error: "Role must be one of the following: 'Admin' or 'User'",
+        .enum(["admin", "user"], {
+        invalid_type_error: "Role must be one of the following: 'admin' or 'user'",
     })
-        .default("User"),
+        .default("user"),
     isBlocked: zod_1.z.boolean().default(false),
 });
 exports.userValidations = {

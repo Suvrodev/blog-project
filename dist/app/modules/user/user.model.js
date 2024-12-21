@@ -33,10 +33,10 @@ const userSchema = new mongoose_1.Schema({
     role: {
         type: String,
         enum: {
-            values: ["Admin", "User"],
-            message: "{VALUE} is not valid. Role can only be either User or Admin",
+            values: ["admin", "user"],
+            message: "{VALUE} is not valid. Role can only be either user or admin",
         },
-        default: "User",
+        default: "user",
     },
     isBlocked: {
         type: Boolean,

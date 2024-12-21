@@ -20,11 +20,11 @@ const userValidationSchema = z.object({
     })
     .max(10, "Password cannot be more than 10 characters"),
   role: z
-    .enum(["Admin", "User"], {
+    .enum(["admin", "user"], {
       invalid_type_error:
-        "Role must be one of the following: 'Admin' or 'User'",
+        "Role must be one of the following: 'admin' or 'user'",
     })
-    .default("User"),
+    .default("user"),
   isBlocked: z.boolean().default(false),
 });
 

@@ -30,21 +30,27 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const createBlog = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const loggedUser = req === null || req === void 0 ? void 0 : req.user;
-        console.log("Logged User: ", loggedUser);
-        if ((loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.role) === "Admin") {
-            throw new AppError_1.default(403, "Admin is unable to create blog");
+        // console.log("*************************");
+        // console.log("Logged User: ", loggedUser);
+        //if Logged user will be admin can not create blog
+        if ((loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.role) === "admin") {
+            throw new AppError_1.default(403, "admin is unable to create blog");
         }
         const blogData = req === null || req === void 0 ? void 0 : req.body;
         blogData.author = loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.id;
-        console.log("Blog data: ", blogData);
+        // console.log("Blog data: ", blogData);
         const result = yield blog_service_1.BlogServices.createBlogIntoDB(blogData);
         // console.log("Result: ", result); // Full Mongoose Document
+        //copy of result in newResult
         const newResult = result.toObject();
         // console.log("New Result: ", newResult);
-        // Structure the result to add loggedUser inside the author details
-        const newResultWithUser = Object.assign(Object.assign({}, newResult), { author: loggedUser });
+        ///Remove lat and exp from logged user (from token) as cleanedAuthor
+        const { iat: _iat, exp: _exp } = loggedUser, cleanedAuthor = __rest(loggedUser, ["iat", "exp"]);
+        ///Attact author info in newResult as newResultWithUser
+        const newResultWithUser = Object.assign(Object.assign({}, newResult), { author: cleanedAuthor });
+        //Remove isPublished, createdAt, updatedAt, __v, from newResultWithUser as finalResult
         const { isPublished, createdAt, updatedAt, __v } = newResultWithUser, finalResult = __rest(newResultWithUser, ["isPublished", "createdAt", "updatedAt", "__v"]);
-        // console.log("New Result with User: ", newResultWithUser);
+        console.log("Final Result: ", finalResult);
         res.status(201).json({
             success: true,
             message: "Blog created successfully",
@@ -106,18 +112,34 @@ const deleteBlog = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 //Update Blog
 const updateBlog = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { role, id: loggedUserId } = req.user;
-        // console.log("Logged User Role: ", role);
-        if (role === "Admin") {
-            throw new AppError_1.default(500, "Admin can not update blog");
+        const loggedUser = req === null || req === void 0 ? void 0 : req.user;
+        // console.log("***********************");
+        // console.log("Logged User: ", loggedUser);
+        const loggedUserId = loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.id;
+        if ((loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.role) === "admin") {
+            throw new AppError_1.default(500, "admin can not update blog");
         }
         const id = req.params.id;
         const result = yield blog_service_1.BlogServices.updateBlogIntoDB(id, req.body, loggedUserId);
+        // console.log("Result from controller: ", result);
+        //copy of result in newResult
+        let newResult;
+        if (result) {
+            newResult = result.toObject();
+        }
+        ///Remove lat and exp from logged user (from token) as cleanedAuthor
+        const { iat: _iat, exp: _exp } = loggedUser, cleanedAuthor = __rest(loggedUser, ["iat", "exp"]);
+        ///Attact author info in newResult as newResultWithUser
+        const newResultWithUser = Object.assign(Object.assign({}, newResult), { author: cleanedAuthor });
+        // console.log("New result with User: ", newResultWithUser);
+        //Remove isPublished, createdAt, updatedAt, __v, from newResultWithUser as finalResult
+        const { isPublished, createdAt, updatedAt, __v, iat, exp } = newResultWithUser, finalResult = __rest(newResultWithUser, ["isPublished", "createdAt", "updatedAt", "__v", "iat", "exp"]);
+        console.log("Final Result: ", finalResult);
         res.status(200).json({
             success: true,
             message: "Blog updated successfully",
             statusCode: 200,
-            data: result,
+            data: finalResult,
         });
     }
     catch (error) {
