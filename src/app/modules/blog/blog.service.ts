@@ -113,7 +113,7 @@ const deleteBlogFromDB = async (id: string, loggedUserId: string) => {
   console.log("Author id of Target Blog: ", blogAuthorId);
 
   if (loggedUserId !== blogAuthorId?.toString()) {
-    throw new AppError(404, "Blog ref id and user is not same");
+    throw new AppError(403, "Blog ref id and user is not same");
   }
 
   const result = await blogModel.findByIdAndDelete(id);
@@ -140,7 +140,7 @@ const updateBlogIntoDB = async (
   console.log("Author id of Target Blog: ", blogAuthorId);
 
   if (loggedUserId !== blogAuthorId?.toString()) {
-    throw new AppError(404, "Blog ref id and user is not same");
+    throw new AppError(403, "Blog ref id and user is not same");
   }
 
   const result = await blogModel.findByIdAndUpdate(id, payload, { new: true });

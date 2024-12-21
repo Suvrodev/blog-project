@@ -107,7 +107,7 @@ const deleteBlogFromDB = (id, loggedUserId) => __awaiter(void 0, void 0, void 0,
     const blogAuthorId = targetBlog === null || targetBlog === void 0 ? void 0 : targetBlog.author;
     console.log("Author id of Target Blog: ", blogAuthorId);
     if (loggedUserId !== (blogAuthorId === null || blogAuthorId === void 0 ? void 0 : blogAuthorId.toString())) {
-        throw new AppError_1.default(404, "Blog ref id and user is not same");
+        throw new AppError_1.default(403, "Blog ref id and user is not same");
     }
     const result = yield blog_model_1.blogModel.findByIdAndDelete(id);
     return result;
@@ -125,7 +125,7 @@ const updateBlogIntoDB = (id, payload, loggedUserId) => __awaiter(void 0, void 0
     const blogAuthorId = targetBlog === null || targetBlog === void 0 ? void 0 : targetBlog.author;
     console.log("Author id of Target Blog: ", blogAuthorId);
     if (loggedUserId !== (blogAuthorId === null || blogAuthorId === void 0 ? void 0 : blogAuthorId.toString())) {
-        throw new AppError_1.default(404, "Blog ref id and user is not same");
+        throw new AppError_1.default(403, "Blog ref id and user is not same");
     }
     const result = yield blog_model_1.blogModel.findByIdAndUpdate(id, payload, { new: true });
     return result;
