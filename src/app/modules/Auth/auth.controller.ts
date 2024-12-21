@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { AuthServices } from "./auth.service";
+import AppError from "../../errors/AppError";
 
 //Login User
 const loginUser: RequestHandler = async (req, res, next) => {
@@ -14,8 +15,9 @@ const loginUser: RequestHandler = async (req, res, next) => {
         token: result?.accessToken,
       },
     });
-  } catch (error) {
-    next(error);
+  } catch (error: any) {
+    // next(error);
+    throw new AppError(401, error);
   }
 };
 
