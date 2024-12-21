@@ -16,8 +16,8 @@ const loginUser: RequestHandler = async (req, res, next) => {
       },
     });
   } catch (error: any) {
-    // next(error);
-    throw new AppError(401, error);
+    next(error);
+    // throw new AppError(401, error);
   }
 };
 

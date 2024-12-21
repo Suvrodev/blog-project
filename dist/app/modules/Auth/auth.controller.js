@@ -8,13 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthControllers = void 0;
 const auth_service_1 = require("./auth.service");
-const AppError_1 = __importDefault(require("../../errors/AppError"));
 //Login User
 const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -29,8 +25,8 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         });
     }
     catch (error) {
-        // next(error);
-        throw new AppError_1.default(401, error);
+        next(error);
+        // throw new AppError(401, error);
     }
 });
 exports.AuthControllers = {
