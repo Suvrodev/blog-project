@@ -53,11 +53,12 @@ const createBlog: RequestHandler = async (req, res, next) => {
 const getAllBlog: RequestHandler = async (req, res, next) => {
   try {
     const result = await BlogServices.getAllBlogsFromDB(req.query);
-    res.status(201).json({
+
+    res.status(200).json({
       success: true,
-      message: "Blog retrive successfully",
-      statusCode: 201,
-      data: { result },
+      message: "Blogs fetched successfully",
+      statusCode: 200,
+      data: result,
     });
   } catch (error) {
     next(error);

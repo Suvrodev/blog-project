@@ -45,7 +45,7 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         isBlocked: isUserExists === null || isUserExists === void 0 ? void 0 : isUserExists.isBlocked,
     };
     const accessToken = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.jwt_access_token, {
-        expiresIn: "10d",
+        expiresIn: "30d",
     });
     //   console.log("JwtPayload: ", jwtPayload);
     //Access Granted: Send AccessToken, Refresh Token

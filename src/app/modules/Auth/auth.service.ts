@@ -38,7 +38,7 @@ const loginUser = async (payload: TLoginUser) => {
     isBlocked: isUserExists?.isBlocked,
   };
   const accessToken = Jwt.sign(jwtPayload, config.jwt_access_token as string, {
-    expiresIn: "10d",
+    expiresIn: "30d",
   });
   //   console.log("JwtPayload: ", jwtPayload);
   //Access Granted: Send AccessToken, Refresh Token

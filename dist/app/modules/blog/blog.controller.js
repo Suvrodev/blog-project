@@ -66,11 +66,11 @@ const createBlog = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 const getAllBlog = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield blog_service_1.BlogServices.getAllBlogsFromDB(req.query);
-        res.status(201).json({
+        res.status(200).json({
             success: true,
-            message: "Blog retrive successfully",
-            statusCode: 201,
-            data: { result },
+            message: "Blogs fetched successfully",
+            statusCode: 200,
+            data: result,
         });
     }
     catch (error) {

@@ -60,30 +60,30 @@ const createBlogIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
 //Get All Blog New
 const getAllBlogsFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const { search, sortBy, sortOrder, filter } = query;
-    // Build DB Query
+    // Build DB Query for search if provided
     const dbQuery = {};
     if (search && typeof search === "string") {
         dbQuery.$or = [
-            { title: { $regex: search, $options: "i" } },
-            { content: { $regex: search, $options: "i" } },
+            { title: { $regex: search, $options: "i" } }, // Search in title
+            { content: { $regex: search, $options: "i" } }, // Search in content
         ];
     }
-    if (filter) {
-        dbQuery.author = filter;
+    //Filtering
+    if (filter && typeof filter === "string") {
+        //  dbQuery.author = dbQuery.author || {};
+        dbQuery.author = filter; // Filter by author ID
     }
-    console.log("DB Query:", dbQuery);
-    // Build Sort Option
-    //In here in sort option will be type of a object where in object key will be string and value will be either 1 or -1
-    const sortOption = {};
-    if (sortBy && typeof sortBy === "string" && typeof sortOrder === "string") {
-        sortOption[sortBy] = sortOrder.toLowerCase() === "desc" ? -1 : 1;
+    //Sorting
+    const sortOptions = {};
+    if (sortBy === "createdAt" || sortBy === "title") {
+        sortOptions[sortBy] = sortOrder === "desc" ? -1 : 1; // Sort in descending or ascending order
     }
-    console.log("Sort Option:", sortOption);
-    // Fetch Blogs
+    // Fetch blogs from DB with search query and populate author
     const result = yield blog_model_1.blogModel
         .find(dbQuery)
-        .populate("author")
-        .sort(sortOption);
+        .sort(sortOptions)
+        .populate("author");
+    // .populate("author");
     return result;
 });
 //########################################################################################################################################################################
