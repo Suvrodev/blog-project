@@ -25,7 +25,7 @@ const loginUser = async (payload: TLoginUser) => {
     isUserExists?.password
   );
   if (!isPasswordMatched) {
-    throw new AppError(500, "Password do not matched");
+    throw new AppError(401, "Password do not matched");
   }
 
   console.log("is User exists: ", isUserExists);
