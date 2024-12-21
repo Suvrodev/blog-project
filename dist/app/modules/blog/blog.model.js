@@ -21,13 +21,19 @@ const blogSchema = new mongoose_1.Schema({
     },
 });
 //Pre Query middleware for dont match isDeleted:true for all
-blogSchema.pre("find", function (next) {
-    this.find({ isDeleted: { $ne: true } });
-    next();
-});
-//Pre Query middleware for dont match isDeleted:true for all
-blogSchema.pre("findOne", function (next) {
-    this.find({ isDeleted: { $ne: true } });
-    next();
-});
+// blogSchema.pre("find", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
+// //Pre Query middleware for dont match isDeleted:true for all
+// blogSchema.pre("findOne", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
+//Check id exists or not
+// blogSchema.pre("findOne", function (next) {
+//   console.log("In checkkkkkkkkkkkkkkkkkkkk");
+//   console.log(this.getQuery);
+//   next();
+// });
 exports.blogModel = (0, mongoose_1.model)("blogs", blogSchema);

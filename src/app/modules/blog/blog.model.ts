@@ -24,15 +24,22 @@ const blogSchema = new Schema<TBlog>(
 );
 
 //Pre Query middleware for dont match isDeleted:true for all
-blogSchema.pre("find", function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
+// blogSchema.pre("find", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
 
-//Pre Query middleware for dont match isDeleted:true for all
-blogSchema.pre("findOne", function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
+// //Pre Query middleware for dont match isDeleted:true for all
+// blogSchema.pre("findOne", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
+
+//Check id exists or not
+// blogSchema.pre("findOne", function (next) {
+//   console.log("In checkkkkkkkkkkkkkkkkkkkk");
+//   console.log(this.getQuery);
+//   next();
+// });
 
 export const blogModel = model<TBlog>("blogs", blogSchema);

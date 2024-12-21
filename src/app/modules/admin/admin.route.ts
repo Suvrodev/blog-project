@@ -4,10 +4,10 @@ import auth from "../../middleware/auth";
 
 const router = express.Router();
 
-router.delete("/blogs/:id", auth("Admin"), adminControllers.deleteBlogByAdmin);
+router.delete("/blogs/:id", auth("admin"), adminControllers.deleteBlogByAdmin);
 router.patch(
   "/users/:userId/block",
-  auth("Admin"),
+  auth("admin"),
   adminControllers.makeUserBlockByAdmin
 );
 

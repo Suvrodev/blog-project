@@ -8,19 +8,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.adminServices = void 0;
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const blog_model_1 = require("../blog/blog.model");
 const user_model_1 = require("../user/user.model");
 ///Make User Blocked
 const makeUserBlockedIntoDBByAdmin = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    //At first Check user exists or not
+    console.log("id of Blocked user from admin controller: ", id);
+    const targetUser = yield user_model_1.userModel.findById(id);
+    console.log("Target user: ", targetUser);
+    if (!targetUser) {
+        console.log("This user not Exists");
+        throw new AppError_1.default(404, "This User not exists");
+    }
     const result = yield user_model_1.userModel.findByIdAndUpdate(id, payload, { new: true });
     return result;
 });
 //Delete Blog
 const deleteBlogFromDBByAdmin = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    //Check this id is exists or not
+    console.log("id of blog from admin service: ", id);
+    const targetBlog = yield blog_model_1.blogModel.findById(id);
+    console.log("Target Blog: ", targetBlog);
+    if (!targetBlog) {
+        throw new AppError_1.default(404, "This blog not exists");
+    }
     const result = yield blog_model_1.blogModel.findByIdAndDelete(id);
-    return result;
+    return result; //
 });
 exports.adminServices = {
     makeUserBlockedIntoDBByAdmin,

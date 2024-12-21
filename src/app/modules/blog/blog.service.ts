@@ -107,6 +107,10 @@ const deleteBlogFromDB = async (id: string, loggedUserId: string) => {
 
   ///Check author of blog
   const targetBlog = await blogModel.findById(id);
+  console.log("Target Blog: ", targetBlog);
+  if (!targetBlog) {
+    throw new AppError(404, "This blog not exists");
+  }
   const blogAuthorId = targetBlog?.author;
   console.log("Author id of Target Blog: ", blogAuthorId);
 
@@ -125,11 +129,17 @@ const updateBlogIntoDB = async (
   loggedUserId: string
 ) => {
   //   console.log("Logged User id: ", loggedUserId);
+  //   console.log("Here");
 
   ///Check author of blog
   const targetBlog = await blogModel.findById(id);
+  console.log("Target Blog: ", targetBlog);
+  if (!targetBlog) {
+    throw new AppError(404, "This blog not exists");
+  }
+
   const blogAuthorId = targetBlog?.author;
-  //   console.log("Author id of Target Blog: ", blogAuthorId);
+  console.log("Author id of Target Blog: ", blogAuthorId);
 
   if (loggedUserId !== blogAuthorId?.toString()) {
     throw new AppError(404, "Blog ref id and user is not same");
